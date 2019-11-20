@@ -1,83 +1,74 @@
-// Write your JavaScript code here!
 function whereWeGoin() {
-        fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
+    fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
       response.json().then(function(json){
-      let destination = json[0];
-      const div = document.getElementById("missionTarget");
-      div.innerHTML = `
-         <ol>
-           <li>Name: ${destination.name}</li>
-         <li>Diameter: ${destination.diameter}</li>
-         <li>Star: ${destination.star}</li>
-         <li>Distance from Earth: ${destination.distance}</li>
-         <li>Number of Moons: ${destination.moons}</li>
-         </ol>
-       <img src="${destination.image}">
-      `;
-   });
-}); 
-
-
-    
+        let destination = json[3];
+        const div = document.getElementById("missionTarget");
+            div.innerHTML = `
+                <ol>
+                    <li>Name: ${destination.name}</li>
+                    <li>Diameter: ${destination.diameter}</li>
+                    <li>Star: ${destination.star}</li>
+                    <li>Distance from Earth: ${destination.distance}</li>
+                    <li>Number of Moons: ${destination.moons}</li>
+                </ol>
+                <img src='${destination.image}'>
+            `;
+        });
+    });
 }
 
+function updateStatus(){
+    let fuelLevelInput = document.querySelector("input[fuel=fuelLevel]").value;
+    let cargoKgInput = document.querySelector("input[cargo=cargoKg").value;
+
+    let launchStatus = document.getElementById("launchStatus");
+    let faultyItems = document.getElementById("faultyItems");
+    let fuelStatus = document.getElementById("fuelStatus");
+    let cargoStatus = document.getElementById("cargoStatus");
+
+    if (fuelLevelInput>10000 && cargoKgInput<10000) {
+        launchStatus.innerHTML = " Shuttle is ready for launch!";
+        launchStatus.style.color = "green";
+        faultyItems.style.visibility = "hidden";
+
+    }else{
+        launchStatus.innerHTML = "Shuttle not ready for launch!";
+        launchStatus.style.color = "red";
+        faultyItems.style.visibility = "visible";
+        if (fuelLevelInput<10000){
+            fuelStatus.innerHTML = "Not enough fuel to complete mission.";
+        }
+        if (cargoKgInput>10000){
+            cargoStatus.innerHTML = "Too much cargo weight. Will not achieve liftoff.";
+        
+        }
+    }
+}
+function initialAlert(message){
+    alert(message)
+    event.preventDefault();
+}
 
 function validateEntries() {
    let pilotNameInput = document.querySelector("input[name=pilotName]");
-    if (pilotNameInput.value === " ") {
-        pilotNameWarning = "Please enter a name for the Pilot.\n";
-        event.preventDefault();
-    }else{
-        pilotNameWarning= " ";
-    }
-
    let coPilotNameInput = document.querySelector("input[name=coPilotName]");
-    if (coPilotNameInput.value === " "){
-        coPilotNameWarning = "Please enter a name for the co-Pilot.\n";
-        event.preventDefault();
+   let fuelLevelInput = document.querySelector("input[name=fuelLeve]");
+   let cargoKgInput = document.querySelector("input[name=cargoKg]");
+
+
+    if (pilotNameInput.value === ""|| coPilotNameInput.value === "" || fuelLevelInput.value === "" || cargoKgInput === "") {
+        initialAlert("All fields are required!");
+
+    }else if (isNaN(fuelLevelInput.value) || (isNaN(cargoKgInput.value) || !(isNaN(pilotNameInput.value) || !(isNaN(coPilotNameInput.value))){
+        initialAlert ("Data type error! Please review input types");
     }else{
-        coPilotNameWarning = " ";
-    }
-
-   let fuelLevelInput = document.querySelector("input[fuel=fuelLevel]");
-    if (fuelLevelInput.value === " " || fuelLevelInput.value === isNaN){
-        fuelLevelWarning = "Please enter a valid fuel amount. Fuel input must be an integer.\n";
-        event.preventDefault();
-    }else{
-        fuelLevelWarning = " ";
-    }
-   
-    let cargoKgInput = document.querySelector("input[cargo=cargoKg");
-    if (cargoKgInput.value === " " || fuelLevelInput.value === isNaN){
-        cargoKgWarning = "Please enter a valid cargo input amount. Cargo input must be an integer.\n";
-        event.preventDefault();
-    }else{
-        cargoKgWarning = " ";
-    }
-
-
-   if (pilotNameInput.value === "" || coPilotNameInput.value === "" || fuelLevelInput.value === "" || cargoKgInput.value === "") {
-      alert ("All fields are required!");
-      event.preventDefault();
-   } else if (!(isNaN(pilotNameInput.value)) || !(isNaN(coPilotNameInput.value)) || isNaN(fuelLevelInput.value) || isNaN(cargoKgInput.value)){
-      alert ("Data type error! Please review input types");
-      event.preventDefault();
-
-   }else{
-      let pilotStatus = document.getElementById("pilotStatus");
-      let coPilotStatus = document.getElementById("coPilotStatus");
-      pilotStatus.innerHTML = (`Pilot ${pilotNameInput.value} ready`)
-      coPilotStatus.innerHTML = (`CoPilot ${coPilotNameInput.value}ready`)
-      updateLaunchStatus();
-
-      
-   }   
-
+        let pilotStatus = document.getElementById("pilotStatus");
+        let coPilotStatus = document.getElementById("coPilotStatus");
+        pilotStatus.innerHTML = (`Pilot ${pilotNameInput.value} ready`)
+        coPilotStatus.innerHTML = (`CoPilot ${coPilotNameInput.value}ready`)
+        updateStatus();
+    ]
 }
- //      if (fuelLevelInput.value<10000 || cargoKgInput.value>10000){
-//         alert("Shuttle not ready for launch!");
-
-
 
 window.addEventListener("load", function() {
    whereWeGoin();
@@ -86,4 +77,4 @@ window.addEventListener("load", function() {
       validateEntries();  
 
    });
-});
+})
